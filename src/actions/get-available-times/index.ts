@@ -41,8 +41,8 @@ export const getAvailableTimes = actionClient
     }
     const selectedDayOfWeek = dayjs(parsedInput.date).day();
     const doctorIsAvailable =
-      selectedDayOfWeek >= doctor.availableFromWeekDay &&
-      selectedDayOfWeek <= doctor.availableToWeekDay;
+      selectedDayOfWeek >= Number(doctor.availableFromWeekDay) &&
+      selectedDayOfWeek <= Number(doctor.availableToWeekDay);
     if (!doctorIsAvailable) {
       return [];
     }

@@ -67,7 +67,7 @@ const ClinicForm = () => {
               {form.formState.isSubmitting && (
                 <Loader2 className="h-4 w-4 animate-spin" />
               )}
-              Criar Clínica
+              Criar clínica
             </Button>
           </DialogFooter>
         </form>

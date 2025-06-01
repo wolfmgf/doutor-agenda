@@ -157,8 +157,8 @@ const AddAppointmentForm = ({
     if (!selectedDoctor) return false;
     const dayOfWeek = date.getDay();
     return (
-      dayOfWeek >= Number(selectedDoctor.availableFromWeekDay) &&
-      dayOfWeek <= Number(selectedDoctor.availableToWeekDay)
+      dayOfWeek >= selectedDoctor?.availableFromWeekDay &&
+      dayOfWeek <= selectedDoctor?.availableToWeekDay
     );
   };
 

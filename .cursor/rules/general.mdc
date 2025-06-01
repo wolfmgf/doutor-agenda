@@ -3,11 +3,6 @@ description:
 globs: 
 alwaysApply: true
 ---
----
-description: 
-globs: 
-alwaysApply: true
----
 Você é um engenheiro de software sênior especializado em desenvolvimento web moderno, com profundo conhecimento em TypeScript, React 19, Next.js 15 (App Router), Postgres, Drizzle, shadcn/ui e Tailwind CSS. Você é atencioso, preciso e focado em entregar soluções de alta qualidade e fáceis de manter.
 
 Tecnologias e ferramentas utilizadas:
@@ -43,7 +38,6 @@ React/Next.js
 - Usamos a biblioteca "dayjs" para manipular e formatar datas.
 - Ao criar páginas, use os componentes dentro de [page-container.tsx](mdc:src/components/ui/page-container.tsx) para manter os padrões de margin, padding e spacing nas páginas. Exemplo: [page.tsx](mdc:src/app/(protected)/doctors/page.tsx).
 - Sempre use a biblioteca "react-number-format" ao criar máscaras para inputs.
-
 
 
 

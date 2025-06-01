@@ -29,37 +29,24 @@ const AppointmentsPage = async () => {
   if (!session.user.clinic) {
     redirect("/clinic-form");
   }
-
+  if (!session.user.plan) {
+    redirect("/new-subscription");
+  }
   const [patients, doctors, appointments] = await Promise.all([
-    db.select().from(patientsTable).where(eq(patientsTable.clinicId, session.user.clinic.id)),
-    db.select().from(doctorsTable).where(eq(doctorsTable.clinicId, session.user.clinic.id)),
-    db.select().from(appointmentsTable).where(eq(appointmentsTable.clinicId, session.user.clinic.id)),
+    db.query.patientsTable.findMany({
+      where: eq(patientsTable.clinicId, session.user.clinic.id),
+    }),
+    db.query.doctorsTable.findMany({
+      where: eq(doctorsTable.clinicId, session.user.clinic.id),
+    }),
+    db.query.appointmentsTable.findMany({
+      where: eq(appointmentsTable.clinicId, session.user.clinic.id),
+      with: {
+        patient: true,
+        doctor: true,
+      },
+    }),
   ]);
-
-  const appointmentsWithRelations = appointments.map((appointment) => {
-    const patient = patients.find((p) => p.id === appointment.patientId);
-    const doctor = doctors.find((d) => d.id === appointment.doctorId);
-
-    return {
-      ...appointment,
-      patient: patient
-        ? {
-          id: patient.id,
-          name: patient.name,
-          email: patient.email,
-          phoneNumber: patient.phoneNumber,
-          sex: patient.sex,
-        }
-        : null,
-      doctor: doctor
-        ? {
-          id: doctor.id,
-          name: doctor.name,
-          specialty: doctor.specialty,
-        }
-        : null,
-    };
-  });
 
   return (
     <PageContainer>
@@ -75,7 +62,7 @@ const AppointmentsPage = async () => {
         </PageActions>
       </PageHeader>
       <PageContent>
-        <DataTable data={appointmentsWithRelations} columns={appointmentsTableColumns} />
+        <DataTable data={appointments} columns={appointmentsTableColumns} />
       </PageContent>
     </PageContainer>
   );

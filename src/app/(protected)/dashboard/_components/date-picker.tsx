@@ -3,7 +3,7 @@
 import { addMonths, format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Calendar as CalendarIcon } from "lucide-react";
-import { parseAsIsoDate, useQueryState } from "nuqs";
+import { useRouter, useSearchParams } from "next/navigation";
 import * as React from "react";
 import { DateRange } from "react-day-picker";
 
@@ -19,30 +19,35 @@ import { cn } from "@/lib/utils";
 export function DatePicker({
   className,
 }: React.HTMLAttributes<HTMLDivElement>) {
-  const [from, setFrom] = useQueryState(
-    "from",
-    parseAsIsoDate.withDefault(new Date()),
-  );
-  const [to, setTo] = useQueryState(
-    "to",
-    parseAsIsoDate.withDefault(addMonths(new Date(), 1)),
-  );
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const from = searchParams.get("from")
+    ? new Date(searchParams.get("from") as string)
+    : new Date();
+
+  const to = searchParams.get("to")
+    ? new Date(searchParams.get("to") as string)
+    : addMonths(new Date(), 1);
+
   const handleDateSelect = (dateRange: DateRange | undefined) => {
+    const params = new URLSearchParams(searchParams.toString());
+
     if (dateRange?.from) {
-      setFrom(dateRange.from, {
-        shallow: false,
-      });
+      params.set("from", dateRange.from.toISOString());
     }
     if (dateRange?.to) {
-      setTo(dateRange.to, {
-        shallow: false,
-      });
+      params.set("to", dateRange.to.toISOString());
     }
+
+    router.push(`?${params.toString()}`);
   };
-  const date = {
+
+  const date: DateRange = {
     from,
     to,
   };
+
   return (
     <div className={cn("grid gap-2", className)}>
       <Popover>
@@ -55,7 +60,7 @@ export function DatePicker({
               !date && "text-muted-foreground",
             )}
           >
-            <CalendarIcon />
+            <CalendarIcon className="mr-2 h-4 w-4" />
             {date?.from ? (
               date.to ? (
                 <>
@@ -68,10 +73,12 @@ export function DatePicker({
                   })}
                 </>
               ) : (
-                format(date.from, "LLL dd, y")
+                format(date.from, "LLL dd, y", {
+                  locale: ptBR,
+                })
               )
             ) : (
-              <span>Pick a date</span>
+              <span>Selecione uma data</span>
             )}
           </Button>
         </PopoverTrigger>

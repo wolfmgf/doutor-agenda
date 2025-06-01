@@ -15,12 +15,12 @@ type AppointmentWithRelations = typeof appointmentsTable.$inferSelect & {
     email: string;
     phoneNumber: string;
     sex: "male" | "female";
-  } | null;
+  };
   doctor: {
     id: string;
     name: string;
     specialty: string;
-  } | null;
+  };
 };
 
 export const appointmentsTableColumns: ColumnDef<AppointmentWithRelations>[] = [
@@ -28,10 +28,6 @@ export const appointmentsTableColumns: ColumnDef<AppointmentWithRelations>[] = [
     id: "patient",
     accessorKey: "patient.name",
     header: "Paciente",
-    cell: (params) => {
-      const appointment = params.row.original;
-      return appointment.patient?.name ?? "Paciente não encontrado";
-    },
   },
   {
     id: "doctor",
@@ -39,7 +35,7 @@ export const appointmentsTableColumns: ColumnDef<AppointmentWithRelations>[] = [
     header: "Médico",
     cell: (params) => {
       const appointment = params.row.original;
-      return appointment.doctor?.name ?? "Médico não encontrado";
+      return `${appointment.doctor.name}`;
     },
   },
   {
@@ -57,10 +53,6 @@ export const appointmentsTableColumns: ColumnDef<AppointmentWithRelations>[] = [
     id: "specialty",
     accessorKey: "doctor.specialty",
     header: "Especialidade",
-    cell: (params) => {
-      const appointment = params.row.original;
-      return appointment.doctor?.specialty ?? "Especialidade não encontrada";
-    },
   },
   {
     id: "price",
